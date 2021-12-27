@@ -57,10 +57,10 @@ from matplotlib import pyplot as plt
 #single file analysis
 
 
-path = './intracranial tof/'
+path = './50_20 tof/'
 file_list = os.listdir(path)
 
-whole_array = np.expand_dims(np.empty((512,512)),axis=0)
+whole_array = np.expand_dims(np.empty((768,500)),axis=0)
 
 print(shape(whole_array))
 
@@ -88,7 +88,7 @@ print(min,max)
 
 
 #Create Graph
-plt.hist(Z, range=(2,2.5) ,bins =100, histtype='barstacked')
+plt.hist(Z,range=(0.1,2.5),bins =30, histtype='barstacked')
 
 
 
