@@ -1,18 +1,18 @@
-from sklearn.metrics import r2_score,mean_absolute_error,mean_squared_error, mean_squared_log_error
-import pandas as pd
+import nibabel as nib
+import dicom_numpy
+import os
 import numpy as np
-from xgboost import XGBRegressor
-df = pd.read_csv("test.csv")
 
+pathtodicom = './50_20 tof/'
+# get list of dicom images from directory that make up the 3D image
+dicomlist = [pathtodicom + f for f in os.listdir(pathtodicom)]
 
-X = df["x"]
-y = df["y"]
+# load dicom volume
+vol, affine_LPS = dicom_numpy.combine_slices(dicomlist)
 
-X = X.values
-y = y.values
+# convert the LPS affine to RAS
+affine_RAS = np.diagflat([-1,-1,1,1]).dot(affine_LPS)
 
-xgb_r = XGBRegressor(random_state=200)
-
-xgb_r.fit(X,np.log(y))
-
-y_pred_sgv = xgb_r.predict()
+# create nibabel nifti object
+niiimg = nib.Nifti1Image(vol, affine_RAS)
+nib.save(niiimg, '/path/to/save')

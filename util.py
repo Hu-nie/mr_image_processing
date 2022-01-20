@@ -5,7 +5,7 @@ import os
 def load_dicome(name):
     file_name  = name
     image = sitk.ReadImage(file_name)
-    image_array = sitk.GetArrayFromImage(image).astype('float32')
+    image_array = sitk.GetArrayFromImage(image).astype('float16')
     
     return image_array
 
@@ -21,8 +21,8 @@ def img_norm(image_array):
     copy_img = copy_img1 /np.max(copy_img1)
 
     copy_img *= 2**8-1
-    copy_img = copy_img.astype(np.uint8)
-
+    copy_img = copy_img.astype(np.uint16)
+    copy_img = np.expand_dims(copy_img, axis=0)
     return copy_img
 
 

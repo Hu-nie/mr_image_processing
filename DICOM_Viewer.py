@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 import glob
-print(sys.argv)
 
 # load the DICOM files
 files = []
@@ -57,5 +56,8 @@ a2.set_aspect(sag_aspect)
 a3 = plt.subplot(2, 2, 3)
 plt.imshow(img3d[img_shape[0]//2, :, :].T)
 a3.set_aspect(cor_aspect)
+
+print(img3d[:,:,1])
+
 
 plt.show()
