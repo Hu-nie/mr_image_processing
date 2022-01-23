@@ -1,3 +1,4 @@
+from operator import le
 from posixpath import normpath
 from sys import path
 import numpy as np
@@ -12,40 +13,61 @@ import seaborn as sns
 import cv2
 
 path = 'D:/jeonbuk university/TOF_MR/JSK/TOF_1/'
-
+normal = []
 
 # print(file_list)
 ## 이미지 해상도 확인 후 데이터 3D 배열로 결합
-image = sitk.ReadImage(glob.glob(os.path.join(path,'*.dcm'))[0])
+image = sitk.ReadImage(glob.glob(os.path.join(path,'*.dcm'))[112])
 image_array = sitk.GetArrayFromImage(image)
 whole_array = np.expand_dims(np.empty(((image_array[0].shape)[0],(image_array[0].shape)[1])),axis=0)
+# image_array = img_norm(image_array)
+# img = np.squeeze(image_array)
 
 for filename in glob.glob(os.path.join(path,'*.dcm')):
     print(filename)
     image = sitk.ReadImage(filename)
     image_array = sitk.GetArrayFromImage(image)
-    image_array = img_norm(image_array) #SI Value Convert to 0~255
-    whole_array = np.concatenate((whole_array,image_array),axis=0)
+    img = img_norm(image_array) #SI Value Convert to 0~255
+    t, t_otsu = cv2.threshold(img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
+    t_otsu_1=np.where(t_otsu == 255, 1, t_otsu)
+    a = img * t_otsu_1
+    # print(set(t_otsu))
+    normal = normal + (a.flatten()).tolist()
     
-whole_array = whole_array[1:]
-print(whole_array.shape)
+    # print(set(tuple(t_otsu)))
+    # foreResion = foreResion + (img[np.where(img<= t)].tolist())
 
-# t, t_otsu = cv2.threshold(whole_array, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
-## z-score를 통한 정규화 진행후 분포 표현
-# normal = (whole_array - whole_array.mean()) / whole_array.std()
-normal = whole_array.flatten()
+    # whole_array = np.concatenate((whole_array,image_array),axis=0)
 
-# normal = image_array.flatten()
+normal =  [item for item in normal if item != 0]
 
+
+
+# whole_array = whole_array[1:]
+# print(whole_array.shape)
+
+# t, t_otsu = cv2.threshold(img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
+# print(img)
+
+# img[img<=t]=0
+# img[img>t]=255
+
+# normal = np.array(foreResion)
+
+# ## z-score를 통한 정규화 진행후 분포 표현
+# # normal = (whole_array - whole_array.mean()) / whole_array.std()
+# # normal = whole_array.flatten()
+
+# # # normal = image_array.flatten()
 cut_off = np.percentile(normal, 99.775)
-# normal= np.sort(normal)
+# # # normal= np.sort(normal)
 
-# sns.kdeplot(normal,log=True,kde=True,hist=False)
+# sns.displot(normal,log=True,kde=True)
 
-
+print(min(normal))
 #Create Graph
 plt.subplot(1,2,1)
-plt.hist(normal,bins =500, label='normal',color = 'midnightblue')
+plt.hist(normal,bins =150, label='normal',color = 'midnightblue')
 plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
 plt.xlabel('Signal intensity')
 plt.ylabel('n')
@@ -54,7 +76,7 @@ plt.legend(loc='upper left')
 
 
 plt.subplot(1,2,2)
-plt.hist(normal,bins =500, label='log',log=True,color = 'midnightblue')
+plt.hist(normal,bins =150, label='log',log=True,color = 'midnightblue')
 plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
 plt.xlabel('Signal intensity')
 plt.ylabel('log(n)')

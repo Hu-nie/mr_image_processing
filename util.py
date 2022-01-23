@@ -22,7 +22,7 @@ def img_norm(image_array):
 
     copy_img *= 2**8-1
     copy_img = copy_img.astype(np.uint16)
-    copy_img = np.expand_dims(copy_img, axis=0)
+    # copy_img = np.expand_dims(copy_img, axis=0)
     return copy_img
 
 
