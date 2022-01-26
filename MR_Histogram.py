@@ -11,7 +11,7 @@ import tqdm
 import seaborn as sns
 import cv2
 
-path = 'D:/jeonbuk university/TOF_MR/JSK/TOF_1/'
+path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
 
 
 # print(file_list)

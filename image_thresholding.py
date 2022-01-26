@@ -9,7 +9,7 @@ import glob
 
 
 ## image load & normalilzation
-path = 'D:/jeonbuk university/TOF_MR/JSK/TOF_1/'
+path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
 image = sitk.ReadImage(glob.glob(os.path.join(path,'*.dcm'))[112])
 image_array = sitk.GetArrayFromImage(image)
 # image_array = load_dicome('D:/jeonbuk university/TOF_MR/JSK/TOF_1/')
@@ -20,6 +20,7 @@ copy_img = np.squeeze(copy_img)
 
 # c = np.percentile(copy_img,[99.775],interpolation='nearest')
 # print(c)
+
 
 _, t_130 = cv2.threshold(copy_img, 65, 255, cv2.THRESH_BINARY)
 t, t_otsu = cv2.threshold(copy_img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )

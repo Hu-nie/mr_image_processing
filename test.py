@@ -1,45 +1,34 @@
-from operator import le
-from posixpath import normpath
-from sys import path
 import numpy as np
-import SimpleITK as sitk
+
 import os
 from matplotlib import pyplot as plt
-from py import log
-from util import img_norm
+from util import get_resolution,img_norm
 import glob
-import tqdm
+
 import seaborn as sns
 import cv2
 
-path = 'D:/jeonbuk university/TOF_MR/JSK/TOF_1/'
+path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
 normal = []
 
-# print(file_list)
-## 이미지 해상도 확인 후 데이터 3D 배열로 결합
-image = sitk.ReadImage(glob.glob(os.path.join(path,'*.dcm'))[112])
-image_array = sitk.GetArrayFromImage(image)
-whole_array = np.expand_dims(np.empty(((image_array[0].shape)[0],(image_array[0].shape)[1])),axis=0)
-# image_array = img_norm(image_array)
-# img = np.squeeze(image_array)
+
+whole_array = get_resolution(path)
 
 for filename in glob.glob(os.path.join(path,'*.dcm')):
-    print(filename)
-    image = sitk.ReadImage(filename)
-    image_array = sitk.GetArrayFromImage(image)
-    img = img_norm(image_array) #SI Value Convert to 0~255
+    img = img_norm(filename) #SI Value Convert to 0~255
     t, t_otsu = cv2.threshold(img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
-    t_otsu_1=np.where(t_otsu == 255, 1, t_otsu)
+    t_otsu_1 = np.where(t_otsu == 255, 1, t_otsu)
     a = img * t_otsu_1
     # print(set(t_otsu))
     normal = normal + (a.flatten()).tolist()
+    print(filename)
     
     # print(set(tuple(t_otsu)))
     # foreResion = foreResion + (img[np.where(img<= t)].tolist())
 
     # whole_array = np.concatenate((whole_array,image_array),axis=0)
 
-normal =  [item for item in normal if item != 0]
+# normal =  [item for item in normal if item != 0]
 
 
 
@@ -73,14 +62,14 @@ plt.xlabel('Signal intensity')
 plt.ylabel('n')
 plt.legend(loc='upper left')
 
+print('1')
 
-
-plt.subplot(1,2,2)
-plt.hist(normal,bins =150, label='log',log=True,color = 'midnightblue')
-plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
-plt.xlabel('Signal intensity')
-plt.ylabel('log(n)')
-plt.legend(loc='upper left')
+# plt.subplot(1,2,2)
+# plt.hist(normal,bins =150, label='log',log=True,color = 'midnightblue')
+# plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
+# plt.xlabel('Signal intensity')
+# plt.ylabel('log(n)')
+# plt.legend(loc='upper left')
 
 
 #히스토그램 임의 Cut off 확인을 위한 axvline
