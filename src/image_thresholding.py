@@ -1,7 +1,7 @@
 import imp
 import cv2
 from matplotlib import pyplot as plt
-from util import load_dicome,img_norm
+from util import imageNormalization
 import numpy as np
 import SimpleITK as sitk
 import os
@@ -9,12 +9,12 @@ import glob
 
 
 ## image load & normalilzation
-path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
-image = sitk.ReadImage(glob.glob(os.path.join(path,'*.dcm'))[112])
-image_array = sitk.GetArrayFromImage(image)
+path = 'D:/3_jeonbuk university/TOF_MR/SDH/TOF_1/'
+# image = sitk.ReadImage(glㅍob.glob(os.path.join(path,'*.dcm'))[112])
+# image_array = sitk.GetArrayFromImage(image)
 # image_array = load_dicome('D:/jeonbuk university/TOF_MR/JSK/TOF_1/')
-copy_img = img_norm(image_array)
-copy_img = np.squeeze(copy_img)
+copy_img = imageNormalization(glob.glob(os.path.join(path,'*.dcm'))[60])
+# copy_img = np.squeeze(copy_img)
 
 # print(copy_img.shape)
 
@@ -22,10 +22,10 @@ copy_img = np.squeeze(copy_img)
 # print(c)
 
 
-_, t_130 = cv2.threshold(copy_img, 65, 255, cv2.THRESH_BINARY)
+_, t_130 = cv2.threshold(copy_img, 94, 255, cv2.THRESH_BINARY)
 t, t_otsu = cv2.threshold(copy_img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
 
-
+print(t_130.shpae)
 print('otsu threshold:', t_otsu)
 
 imgs = {'Original': copy_img, 't:130':t_130, f'otsu:{t:.0f}': t_otsu}

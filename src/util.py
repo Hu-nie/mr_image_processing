@@ -36,3 +36,29 @@ def imageNormalization(filename):
     # copy_img = np.expand_dims(copy_img, axis=0)
     return copy_img
 
+def normal_dist(x , mean , sd):
+    prob_density = (1/np.sqrt(2*(np.pi*sd))) * np.exp(-0.5*((x-mean)/sd)**2)
+
+    return prob_density
+
+
+def gumbel_dist(x,mean,sd):
+    prob_density = 1/sd*np.exp(-((x-mean)/sd)-np.exp(-((x-mean)/sd)))
+
+    return prob_density
+
+
+def createMIP(np_img, slices_num):
+    ''' create the mip image from original image, slice_num is the number of 
+    slices for maximum intensity projection'''
+    img_shape = np_img.shape
+    np_mip = np.zeros(img_shape)
+    for i in range(img_shape[0]):
+        start = max(0, i-slices_num)
+        np_mip[i,:,:] = np.amax(np_img[start:i+1],0)
+    return np_mip
+
+
+# ## z-score를 통한 정규화 진행후 분포 표현
+# # normal = (whole_array - whole_array.mean()) / whole_array.std()
+# # normal = whole_array.flatten()
