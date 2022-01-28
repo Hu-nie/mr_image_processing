@@ -3,6 +3,7 @@ import numpy as np
 import os
 import glob
 import pydicom
+from tqdm import tqdm
 
 ## 이미지 해상도 확인 후 데이터 3D 배열로 결합
 def getResolution(path):
@@ -53,7 +54,7 @@ def createMIP(np_img, slices_num):
     slices for maximum intensity projection'''
     img_shape = np_img.shape
     np_mip = np.zeros(img_shape)
-    for i in range(img_shape[0]):
+    for i in tqdm(range(img_shape[0])):
         start = max(0, i-slices_num)
         np_mip[i,:,:] = np.amax(np_img[start:i+1],0)
     return np_mip

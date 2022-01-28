@@ -12,27 +12,29 @@ import seaborn as sns
 path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
 
 img = imageNormalization(glob.glob(os.path.join(path,'*.dcm'))[69]) #SI Value Convert to 0~255
-m , mask = cv2.threshold(img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
-
-img = img.astype(np.uint8)
-mask = mask.astype(np.uint8)
-res =  cv2.bitwise_and(img,mask)
-
-_, t_94 = cv2.threshold(res, 94, 255, cv2.THRESH_BINARY)
-
-res_1 =  cv2.bitwise_and(res,t_94)
 
 
-contours, hierarchy = cv2.findContours(t_94, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+# m , mask = cv2.threshold(img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
+
+# img = img.astype(np.uint8)
+# mask = mask.astype(np.uint8)
+# res =  cv2.bitwise_and(img,mask)
+
+_, mask = cv2.threshold(img, 94, 255, cv2.THRESH_BINARY)
+
+res_1 =  cv2.bitwise_and(img,mask)
+
+print(img.dtype,mask.dtype)
+# contours, hierarchy = cv2.findContours(t_94, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
 
-for cnt in contours:
-    cv2.drawContours(res_1, [cnt], 0, (255, 0, 0), 1)  # blue
+# for cnt in contours:
+#     cv2.drawContours(res_1, [cnt], 0, (255, 0, 0), 1)  # blue
 
 
 
 
-imgs = {'Original': res_1, 't:130':res, f'otsu:{m:.0f}': t_94}
+imgs = {'Original': img, 'mask':mask, 'img&&mask': res_1}
 
 
 for i, (key, value) in enumerate(imgs.items()):
