@@ -62,3 +62,12 @@ def createMIP(np_img, slices_num):
 # ## z-score를 통한 정규화 진행후 분포 표현
 # # normal = (whole_array - whole_array.mean()) / whole_array.std()
 # # normal = whole_array.flatten()
+
+#히스토그램 임의 Cut off 확인을 위한 axvline
+
+# plt.axvline(Z.mean(), color='red',label = 'line at x ={:.3f}'.format(Z.mean()), linestyle='dashed', linewidth=1)
+# plt.axvline(1, color='black',label = 'line at x ={:.3f}'.format(1), linestyle='dashed', linewidth=1)
+# plt.axvline(2, color='yellow',label = 'line at x ={:.3f}'.format(2), linestyle='dashed', linewidth=1)
+# plt.axvline(2.5, color='black',label = 'line at x ={:.3f}'.format(2.5), linestyle='dashed', linewidth=1)
+# plt.axvline(3.04, color='blue',label = 'line at x ={:.3f}'.format(3.04), linestyle='dashed', linewidth=1)
+# plt.axvline(4, color='yellow',label = 'line at x ={:.3f}'.format(4), linestyle='dashed', linewidth=1)

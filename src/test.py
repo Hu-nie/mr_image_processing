@@ -1,72 +1,48 @@
 import numpy as np
 import os
 from matplotlib import pyplot as plt
-from util import getResolution,imageNormalization, normal_dist, gumbel_dist
+from util import getResolution,imageNormalization
 import glob
 import cv2
 from tqdm import tqdm
-path = 'D:/3_jeonbuk university/TOF_MR/SDH/TOF_1/'
-normal = list()
+import seaborn as sns
 
 
-whole_array = getResolution(path)
 
-for filename in tqdm(glob.glob(os.path.join(path,'*.dcm'))):
-    img = imageNormalization(filename) #SI Value Convert to 0~255
-    _ , t_otsu = cv2.threshold(img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
-    foresion = img *(np.where(t_otsu == 255, 1, t_otsu))
-    normal = normal + (foresion.flatten()).tolist()
+path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
 
-    
+img = imageNormalization(glob.glob(os.path.join(path,'*.dcm'))[69]) #SI Value Convert to 0~255
+m , mask = cv2.threshold(img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )
 
-normal =  np.array([item for item in tqdm(normal) if item != 0])
-normal = np.sort(normal)
+img = img.astype(np.uint8)
+mask = mask.astype(np.uint8)
+res =  cv2.bitwise_and(img,mask)
 
-mean = np.mean(normal)
-std = np.std(normal)
+_, t_94 = cv2.threshold(res, 94, 255, cv2.THRESH_BINARY)
+
+res_1 =  cv2.bitwise_and(res,t_94)
 
 
-n_pdf = normal_dist(normal,mean,std)
-g_pdf = gumbel_dist(normal,mean,std)
-
-# idx = np.argwhere(np.diff(np.sign(5*n_pdf - g_pdf))).flatten()
-# print(idx)
-# plt.plot(normal,2*n_pdf , color = 'red')
-plt.plot(normal,g_pdf , color = 'black')
-plt.plot(normal,10*n_pdf , color = 'blue')
-plt.xlabel('Data points')
-plt.ylabel('Probability Density')
-
-# print(min(normal))
-#Create Graph
-# plt.subplot(1,2,1)
-# plt.hist(normal,bins =150, label='normal',color = 'midnightblue')
-# plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
-# plt.xlabel('Signal intensity')
-# plt.ylabel('n')
-# plt.legend(loc='upper left')
-
-# # print('1')
-
-# plt.subplot(1,2,2)
-# plt.hist(normal,bins =150, label='log',log=True,color = 'midnightblue')
-# plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
-# plt.xlabel('Signal intensity')
-# plt.ylabel('log(n)')
-# plt.legend(loc='upper left')
+contours, hierarchy = cv2.findContours(t_94, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
 
-#히스토그램 임의 Cut off 확인을 위한 axvline
+for cnt in contours:
+    cv2.drawContours(res_1, [cnt], 0, (255, 0, 0), 1)  # blue
 
-# plt.axvline(Z.mean(), color='red',label = 'line at x ={:.3f}'.format(Z.mean()), linestyle='dashed', linewidth=1)
-# plt.axvline(1, color='black',label = 'line at x ={:.3f}'.format(1), linestyle='dashed', linewidth=1)
-# plt.axvline(2, color='yellow',label = 'line at x ={:.3f}'.format(2), linestyle='dashed', linewidth=1)
-# plt.axvline(2.5, color='black',label = 'line at x ={:.3f}'.format(2.5), linestyle='dashed', linewidth=1)
-# plt.axvline(3.04, color='blue',label = 'line at x ={:.3f}'.format(3.04), linestyle='dashed', linewidth=1)
-# plt.axvline(4, color='yellow',label = 'line at x ={:.3f}'.format(4), linestyle='dashed', linewidth=1)
 
-plt.grid()
-plt.legend()
+
+
+imgs = {'Original': res_1, 't:130':res, f'otsu:{m:.0f}': t_94}
+
+
+for i, (key, value) in enumerate(imgs.items()):
+    plt.subplot(1, 3 , i+1)
+    plt.title(key)
+    plt.imshow(value, cmap='gray')
+    plt.xticks([])
+    plt.yticks([])
+
 plt.show()
+
 
 
