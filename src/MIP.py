@@ -32,7 +32,7 @@ sitk_mip.SetOrigin(sitk_img.GetOrigin())
 sitk_mip.SetSpacing(sitk_img.GetSpacing())
 sitk_mip.SetDirection(sitk_img.GetDirection())
 writer = sitk.ImageFileWriter()
-writer.SetFileName(join('./data', 'mip.nii.gz'))
+writer.SetFileName(join('./data', 'mip.dicom'))
 writer.Execute(sitk_mip)
 
 
