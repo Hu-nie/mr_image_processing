@@ -27,7 +27,7 @@ normal = whole_array.flatten()
 cut_off = np.percentile(normal, 99.775)
 # normal= np.sort(normal)
 
-# sns.kdeplot(normal,log=True,kde=True,hist=False)
+# sns.kdeplot(normal,log=True,kde=True,hist=False)a
 
 
 #Create Graph
