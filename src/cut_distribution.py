@@ -6,10 +6,10 @@ import glob
 import cv2
 from tqdm import tqdm
 import seaborn as sns
+from shapely.geometry import LineString
 
 
-
-path = 'D:/3_jeonbuk university/TOF_MR/KJY/TOF_1/'
+path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
 normal = list()
 
 
@@ -33,11 +33,19 @@ std = np.std(normal)
 n_pdf = normal_dist(normal,mean,std)
 g_pdf = gumbel_dist(normal,mean,std)
 
-idx = np.argwhere(np.diff(np.sign(5*n_pdf - g_pdf))).flatten()
-print(idx)
-plt.plot(normal,2*n_pdf , color = 'red')
+
+# idx = np.argwhere(np.diff(np.sign(5*n_pdf - g_pdf))).flatten()
+# print(idx)
+# plt.plot(normal,2*n_pdf , color = 'red')
 plt.plot(normal,g_pdf , color = 'black')
-plt.plot(normal,10*n_pdf , color = 'blue')
+plt.plot(normal,n_pdf , color = 'blue')
+
+line_1 = LineString(np.column_stack((normal,g_pdf)))
+line_2 = LineString(np.column_stack((normal,n_pdf)))
+inter = line_1.intersection(line_2)
+print(inter)
+
+plt.plot(*inter.xy,'ro')
 plt.xlabel('Data points')
 plt.ylabel('Probability Density')
 

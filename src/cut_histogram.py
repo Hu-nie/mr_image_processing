@@ -19,6 +19,7 @@ for filename in tqdm(glob.glob(os.path.join(path,'*.dcm'))):
     whole_array = np.concatenate((whole_array,image_array),axis=0)
     
 whole_array = whole_array[1:]
+
 print(whole_array.shape)
 
 
@@ -33,7 +34,7 @@ cut_off = np.percentile(normal, 99.775)
 #Create Graph
 plt.subplot(1,2,1)
 plt.hist(normal,bins =500, label='normal',color = 'midnightblue')
-plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
+# plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
 plt.xlabel('Signal intensity')
 plt.ylabel('n')
 plt.legend(loc='upper left')
@@ -42,7 +43,7 @@ plt.legend(loc='upper left')
 
 plt.subplot(1,2,2)
 plt.hist(normal,bins =500, label='log',log=True,color = 'midnightblue')
-plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
+# plt.axvline(cut_off, color='red',label = 'line at x ={:.3f}'.format(cut_off), linestyle='dashed', linewidth=1)
 plt.xlabel('Signal intensity')
 plt.ylabel('log(n)')
 plt.legend(loc='upper left')

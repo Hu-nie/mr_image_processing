@@ -11,7 +11,10 @@ import seaborn as sns
 
 path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
 
-img = imageNormalization(glob.glob(os.path.join(path,'*.dcm'))[69]) #SI Value Convert to 0~255
+img = imageNormalization(glob.glob(os.path.join(path,'*.dcm'))[69]) 
+
+
+#SI Value Convert to 0~255
 
 
 # m , mask = cv2.threshold(img, -1, 255,  cv2.THRESH_BINARY | cv2.THRESH_OTSU )

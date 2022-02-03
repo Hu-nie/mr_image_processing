@@ -20,22 +20,40 @@ def dicomToarray(filename):
     
     return image_array
 
-
 def imageNormalization(filename):
     image_array = dicomToarray(filename)
     img = np.squeeze(image_array)
     copy_img = img.copy()
-    copy_img = img.copy()
-    min = np.min(copy_img)
-    max = np.max(copy_img)
+    min_v = np.min(copy_img)
+    max_v = np.max(copy_img)
+    norm_img = ((copy_img - min_v) * (1/(max_v - min_v) * 255))
 
-    copy_img1 = copy_img - np.min(copy_img)
-    copy_img = copy_img1 /np.max(copy_img1)
+    # copy_img1 = copy_img - np.min(copy_img)
+    # copy_img = copy_img1 /np.max(copy_img1)
 
-    copy_img *= 2**8-1
-    copy_img = copy_img.astype(np.uint16)
+    # copy_img *= 2**8-1
+    norm_img = norm_img.astype(np.uint16)
     # copy_img = np.expand_dims(copy_img, axis=0)
-    return copy_img
+    return norm_img
+# def imageNormalization(filename):
+#     image_array = dicomToarray(filename)
+#     img = np.squeeze(image_array)
+#     img_copy = img.copy()
+#     min_v = np.min(img_copy)
+#     max_v = np.max(img_copy)
+#     norm_img = ((img_copy - min_v) * (1/(max_v - min_v) * 255))
+        
+#     return norm_img, min_v, max_v
+
+
+
+def deNormalization(normalized, max, min):
+    denormalized_d = normalized * (max - min) + min
+    
+    return denormalized_d    
+
+
+
 
 def normal_dist(x , mean , sd):
     prob_density = (1/np.sqrt(2*(np.pi*sd))) * np.exp(-0.5*((x-mean)/sd)**2)
