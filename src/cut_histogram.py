@@ -9,7 +9,7 @@ from util import getResolution,imageNormalization
 
 
 
-path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
+path = 'D:/4_jeonbuk university/Human/JSK/TOF_1/Source/'
 whole_array = getResolution(path)
 
 

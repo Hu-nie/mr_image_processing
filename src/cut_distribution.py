@@ -37,17 +37,21 @@ g_pdf = gumbel_dist(normal,mean,std)
 # idx = np.argwhere(np.diff(np.sign(5*n_pdf - g_pdf))).flatten()
 # print(idx)
 # plt.plot(normal,2*n_pdf , color = 'red')
+
+
 plt.plot(normal,g_pdf , color = 'black')
 plt.plot(normal,n_pdf , color = 'blue')
 
 line_1 = LineString(np.column_stack((normal,g_pdf)))
 line_2 = LineString(np.column_stack((normal,n_pdf)))
 inter = line_1.intersection(line_2)
-print(inter)
+
+print((inter.xy)[0][1])
 
 plt.plot(*inter.xy,'ro')
 plt.xlabel('Data points')
 plt.ylabel('Probability Density')
+
 
 plt.grid()
 plt.legend()
