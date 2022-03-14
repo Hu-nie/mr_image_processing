@@ -9,7 +9,7 @@ import seaborn as sns
 from shapely.geometry import LineString
 
 
-path = 'D:/3_jeonbuk university/TOF_MR/JSK/TOF_1/'
+path = 'C:/Users/Hoon/Desktop/TOF_1/'
 normal = list()
 
 
@@ -46,7 +46,7 @@ line_1 = LineString(np.column_stack((normal,g_pdf)))
 line_2 = LineString(np.column_stack((normal,n_pdf)))
 inter = line_1.intersection(line_2)
 
-print((inter.xy)[0][1])
+print((inter.xy)[0][0])
 
 plt.plot(*inter.xy,'ro')
 plt.xlabel('Data points')
