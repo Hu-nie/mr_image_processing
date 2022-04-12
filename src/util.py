@@ -89,24 +89,24 @@ def getIntersection(set_v, normal):
 #     return (sum(list) / len(list))
 
 
-# def dicomToarray(filename):
-#     image = pydicom.read_file(filename)
-#     image_array = image.pixel_array
+def dicomToarray(filename):
+    image = pydicom.read_file(filename)
+    image_array = image.pixel_array
 
-#     return image_array
+    return image_array
 
 
-# def imageNormalization(filename):
-#     image_array = dicomToarray(filename)
-#     img = np.squeeze(image_array)
-#     copy_img = img.copy()
-#     min_v = np.min(copy_img)
-#     max_v = np.max(copy_img)
-#     norm_img = ((copy_img - min_v) * (1 / (max_v - min_v) * 255))
-#     norm_img = norm_img.astype(np.uint16)
-#     # copy_img = np.expand_dims(copy_img, axis=0)
+def imageNormalization(filename):
+    image_array = dicomToarray(filename)
+    img = np.squeeze(image_array)
+    copy_img = img.copy()
+    min_v = np.min(copy_img)
+    max_v = np.max(copy_img)
+    norm_img = ((copy_img - min_v) * (1 / (max_v - min_v) * 255))
+    norm_img = norm_img.astype(np.uint16)
+    # copy_img = np.expand_dims(copy_img, axis=0)
 
-#     return norm_img
+    return norm_img
 
 
 
